@@ -89,6 +89,21 @@ function App() {
           </div>
         </section>
 
+        <section id="architecture" className="summary-section">
+          <h2>System-Architektur</h2>
+          <div className="architecture-container" style={{ textAlign: 'center', marginTop: '1rem' }}>
+            <p style={{ marginBottom: '1.5rem' }}>Visualisierung des Kubernetes-Setups inkl. Cloudflare, HPA und git-sync:</p>
+            <img 
+              src="https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Lukas204/K8SPresentationWebsite/main/architecture.puml" 
+              alt="Kubernetes Architektur Diagramm" 
+              style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}
+            />
+            <p className="summary-placeholder" style={{ marginTop: '1rem', fontSize: '0.8rem' }}>
+              Das Diagramm wird live via PlantUML aus der <code>architecture.puml</code> gerendert.
+            </p>
+          </div>
+        </section>
+
         <section id="comments" className="comments-section">
           <h2>Kommentare</h2>
           <form className="comment-form" onSubmit={handleSubmit}>

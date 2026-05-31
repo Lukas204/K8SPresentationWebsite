@@ -1,0 +1,60 @@
+@startuml
+!theme plain
+skinparam componentStyle rectangle
+
+actor "User" as user
+
+package "Internet" {
+    [Cloudflare Zero Trust] as cf
+}
+
+package "Kubernetes Cluster" {
+    package "Networking" {
+        [Cloudflare Tunnel Pod] as tunnel
+        [Nginx Ingress] as ingress <<Rate Limited>>
+        [App Service] as svc
+    }
+
+    package "Application Pod (ReplicaSet / HPA)" {
+        component "Main Container" as app {
+            [Node.js / Express]
+            [React Frontend]
+        }
+        component "Sidecar Container" as gitsync {
+            [git-sync]
+        }
+    }
+
+    package "Database" {
+        [MariaDB Pod] as db
+        database "Persistent Volume" as pvc
+    }
+}
+
+package "External Source" {
+    [GitHub Repository] as git
+}
+
+user --> cf : HTTPS
+cf --> tunnel : Secure Tunnel
+tunnel --> ingress : Internal Traffic
+ingress --> svc : Route
+svc --> app : Load Balance (1-10 Pods)
+
+gitsync <-left-> git : Periodic Sync
+gitsync -right-> app : Shared Volume (Code)
+
+app --> db : SQL Query
+db -down-> pvc : Data Persistence
+
+note right of ingress
+  Rate Limit: 5 RPS
+  Burst: 10
+end note
+
+note top of app
+  HPA: 1-10 Replicas
+  Target CPU: 50%
+end note
+
+@enduml
