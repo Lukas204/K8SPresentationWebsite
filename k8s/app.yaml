@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-handout-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-handout
+  template:
+    metadata:
+      labels:
+        app: k8s-handout
+    spec:
+      containers:
+      - name: app
+        image: node:20-slim
+        command: ["sh", "-c"]
+        args:
+        - |
+          cd /src/code
+          npm install
+          npm run build
+          npm start
+        env:
+        - name: DB_HOST
+          value: "mariadb"
+        - name: DB_NAME
+          # All sensitive and config data is pulled from the secret
+          valueFrom:
+            secretKeyRef:
+              name: handout-db-secret
+              key: db-name
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: handout-db-secret
+              key: db-user
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: handout-db-secret
+              key: db-password
+        - name: PORT
+          value: "3000"
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: code-volume
+          mountPath: /src
+      - name: git-sync
+        image: registry.k8s.io/git-sync/git-sync:v4.2.1
+        args:
+        - --repo=$(GIT_REPO_URL)
+        - --branch=main
+        - --wait=60
+        - --root=/src
+        - --link=code
+        env:
+        - name: GIT_REPO_URL
+          valueFrom:
+            secretKeyRef:
+              name: handout-git-secret
+              key: repo-url
+        # If your repo is private, you would also add SSH/Token secrets here
+        volumeMounts:
+        - name: code-volume
+          mountPath: /src
+      volumes:
+      - name: code-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-handout-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: k8s-handout
