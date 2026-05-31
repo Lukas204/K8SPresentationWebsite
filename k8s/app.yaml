@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: k8s-handout-app
 spec:
-  replicas: 1
+  # Replicas managed by HPA
   selector:
     matchLabels:
       app: k8s-handout
@@ -26,7 +26,6 @@ spec:
         - name: DB_HOST
           value: "mariadb"
         - name: DB_NAME
-          # All sensitive and config data is pulled from the secret
           valueFrom:
             secretKeyRef:
               name: handout-db-secret
@@ -45,6 +44,27 @@ spec:
           value: "3000"
         ports:
         - containerPort: 3000
+        # HEALTH CHECKS
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 60
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        # RESOURCES (Needed for HPA)
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
         volumeMounts:
         - name: code-volume
           mountPath: /src
@@ -62,7 +82,6 @@ spec:
             secretKeyRef:
               name: handout-git-secret
               key: repo-url
-        # If your repo is private, you would also add SSH/Token secrets here
         volumeMounts:
         - name: code-volume
           mountPath: /src
@@ -75,9 +94,27 @@ kind: Service
 metadata:
   name: k8s-handout-service
 spec:
-  type: LoadBalancer
   ports:
   - port: 80
     targetPort: 3000
   selector:
     app: k8s-handout
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: k8s-handout-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: k8s-handout-app
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50

@@ -51,7 +51,7 @@ function App() {
           <div className="literature-grid">
             <article className="card">
               <div className="card-img">
-                <img src="https://m.media-amazon.com/images/I/91uS87fTNYL._AC_UF1000,1000_QL80_.jpg" alt="Kubernetes: Up and Running Cover" />
+                <img src="https://www.oreilly.com/covers/urn:orm:book:9781098110192/296w/?format=webp" alt="Kubernetes: Up and Running Cover" />
               </div>
               <div className="card-content">
                 <h3>Kubernetes: Up & Running</h3>
@@ -63,7 +63,7 @@ function App() {
 
             <article className="card">
               <div className="card-img">
-                <img src="https://dpunkt.de/wp-content/uploads/2023/04/9783864909115.jpg" alt="Kubernetes (dpunkt) Cover" />
+                <img src="https://dpunkt.de/wp-content/uploads/2024/03/13976.jpg" alt="Kubernetes (dpunkt) Cover" />
               </div>
               <div className="card-content">
                 <h3>Kubernetes (3. Auflage)</h3>
