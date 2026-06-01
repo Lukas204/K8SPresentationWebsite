@@ -2,7 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: k8s-handout-app
+  namespace: default
 spec:
+  # Replicas managed dynamically by HPA
   selector:
     matchLabels:
       app: k8s-handout
@@ -13,80 +15,47 @@ spec:
     spec:
       containers:
         - name: app
-          image: node:20-slim
-          command: ["sh", "-c"]
-          args:
-            - |
-              # Ensure health state is clean on start
-              rm -f /tmp/healthy
-              
-              # Initial setup and start
-              while [ ! -d /src/code ]; do echo "Waiting for initial sync..."; sleep 2; done
-              CURRENT_REF=$(readlink -f /src/code)
-              cd "$CURRENT_REF"
-              
-              # Isolate node_modules per release to prevent active app crashes
-              npm install --silent && npm run build
-              echo "Starting initial server version..."
-              node server.js &
-              PID=$!
-              
-              # Mark as healthy now that server is up
-              touch /tmp/healthy
-              
-              while true; do
-                while [ "$(readlink -f /src/code)" = "$CURRENT_REF" ]; do
-                  sleep 5
-                done
-              
-                NEW_REF=$(readlink -f /src/code)
-                echo "New code detected at $NEW_REF. Building..."
-              
-                cd "$NEW_REF"
-                # Build independently without breaking the running process's dependencies
-                npm install --silent && npm run build
-              
-                echo "Build finished. Pulling traffic before process swap..."
-                # 1. REMOVE the health file FIRST. Kubernetes will stop routing traffic here.
-                rm -f /tmp/healthy
-              
-                # 2. Give Kubernetes a brief window to process the unready status
-                sleep 5
-              
-                # 3. Swap the processes safely
-                kill $PID
-                wait $PID 2>/dev/null
-              
-                node server.js &
-                PID=$!
-                CURRENT_REF=$NEW_REF
-              
-                # 4. Mark as healthy again
-                touch /tmp/healthy
-                echo "Update complete. New version is live."
-              done
+          # Jenkins will automatically update this image tag during your build pipeline
+          image: local-registry.default.svc.cluster.local:5000/k8s-handout-app:4
+          imagePullPolicy: Always
           env:
             - name: DB_HOST
               value: "mariadb"
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: handout-db-secret
+                  key: db-name
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: handout-db-secret
+                  key: db-user
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: handout-db-secret
+                  key: db-password
             - name: PORT
               value: "3000"
           ports:
             - containerPort: 3000
-          # MODIFIED PROBES: Using exec mechanism to look at our health state file
+
+          # HEALTH CHECKS (Optimized for instant-start pre-compiled images)
           livenessProbe:
             httpGet:
               path: /
               port: 3000
-            initialDelaySeconds: 30
+            initialDelaySeconds: 10
             periodSeconds: 10
           readinessProbe:
-            exec:
-              command:
-                - cat
-                - /tmp/healthy
+            httpGet:
+              path: /
+              port: 3000
             initialDelaySeconds: 5
-            periodSeconds: 2
-            failureThreshold: 1
+            periodSeconds: 5
+
+          # RESOURCES (Balanced for standard production runtime)
           resources:
             requests:
               cpu: 100m
@@ -94,26 +63,35 @@ spec:
             limits:
               cpu: 500m
               memory: 512Mi
-          volumeMounts:
-            - name: code-volume
-              mountPath: /src
-        - name: git-sync
-          image: registry.k8s.io/git-sync/git-sync:v4.2.1
-          args:
-            - --repo=$(GIT_REPO_URL)
-            - --branch=main
-            - --wait=15
-            - --root=/src
-            - --link=code
-          env:
-            - name: GIT_REPO_URL
-              valueFrom:
-                secretKeyRef:
-                  name: handout-git-secret
-                  key: repo-url
-          volumeMounts:
-            - name: code-volume
-              mountPath: /src
-      volumes:
-        - name: code-volume
-          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-handout-service
+  namespace: default
+spec:
+  ports:
+    - port: 80
+      targetPort: 3000
+  selector:
+    app: k8s-handout
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: k8s-handout-hpa
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: k8s-handout-app
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
