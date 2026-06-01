@@ -1,9 +1,11 @@
 @startuml
 !theme plain
+' Zwingt das gesamte Diagramm in eine saubere Links-nach-Rechts-Ausrichtung
+left to right direction
 skinparam componentStyle rectangle
 skinparam backgroundColor #fcfcfc
-skinparam Nodesep 60
-skinparam Ranksep 50
+skinparam Nodesep 30
+skinparam Ranksep 40
 
 ' Colors & Styles
 skinparam rectangle {
@@ -17,62 +19,69 @@ skinparam rectangle {
 header Kubernetes Presentation Handout Architecture
 footer Stand: 2026
 
-actor "Benutzer" as user #white
-
+' 1. Linke Flanke: Datenquelle
 rectangle "Extern / Internet" <<External>> {
     [GitHub Repository] as git #white
 }
 
-rectangle "Cloudflare Security" <<Security>> {
+' 2. Obere Flanke: User Entrypoint
+actor "Benutzer" as user #white
+
+rectangle "Cloudflare Edge" <<Security>> {
     [Cloudflare Zero Trust] as cf
-    [Cloudflare Tunnel] as tunnel
+    [Ingress Rules] as ing_rules #white
 }
 
-rectangle "Kubernetes Cluster" <<K8s>> {
-    
-    rectangle "Networking" {
-        [Nginx Ingress] as ingress #white
+' 3. Das Zentrum: Kubernetes Cluster
+rectangle "Kubernetes Cluster (KinD)" <<K8s>> {
+
+    rectangle "Cloudflare Tunnel Pod" <<App>> {
+        [cloudflared-tunnel] as tunnel #white
+    }
+
+    rectangle "Networking Tier" {
         [App Service] as svc #white
     }
 
-    rectangle "Application Pod" <<App>> {
+    rectangle "Application Pod\n(k8s-handout-app)" <<App>> {
         package "Containers" {
-            [Node.js / React] as app #white
-            [git-sync] as gitsync #white
+            [Node.js / React\n(Hot-Reload Skript)] as app #white
+            [git-sync\n(v4.2.1)] as gitsync #white
+
+            note "<b>Auto-Update</b>\nPeriod: 60s" as note_gitsync
         }
-        storage "Shared Volume" as shared
+        storage "Shared Volume\n(emptyDir)" as shared
     }
 
     rectangle "Database Tier" {
         database "MariaDB" as db #white
         storage "Persistent Volume" as pvc #white
     }
+
+    rectangle "Autoscaling & Monitoring" {
+        [HorizontalPodAutoscaler] as hpa #fff9c4
+        [Metrics Server] as metrics #white
+    }
 }
 
-' Relations
-user -down-> cf : HTTPS
-cf -down-> tunnel : Tunneling
-tunnel -down-> ingress : API Traffic
+' Relations - Traffic Flow (Benutzer -> Cluster)
+user -down-> cf : HTTPS (k8s.michelstinkt.win)
+cf -down-> ing_rules : Evaluates Paths
+ing_rules .down.> tunnel : Routed via Tunnel
+tunnel -down-> svc : Direct Service Routing
+svc -down-> app : Round Robin (1-10 Replicas)
 
-ingress -down-> svc
-svc -down-> app : Round Robin
-
-gitsync -up-> git : Watch & Pull
+' Relations - Code Sync (Jetzt sauber von links einfließend)
+git -down-> gitsync : Watch & Pull
 gitsync -down-> shared : Update Code
-shared -up-> app : Serve Code
+shared -up-> app : Serve & Build Code
+gitsync -right- note_gitsync
 
+' Relations - Internals (App -> DB & HPA)
 app -down-> db : Read/Write
 db -down-> pvc : Data Persistence
 
-note right of ingress
-  <b>Rate Limit</b>
-  5 Requests / s
-  Burst: 10
-end note
-
-note right of gitsync
-  <b>Auto-Update</b>
-  Period: 60s
-end note
-
+metrics -.up.> app : Scrapes CPU
+hpa -left-> metrics : Reads Data
+hpa .right.> "Application Pod\n(k8s-handout-app)" : Scales Pods
 @enduml
