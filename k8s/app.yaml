@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: k8s-handout-app
 spec:
-  # Replicas managed by HPA
   selector:
     matchLabels:
       app: k8s-handout
@@ -13,145 +12,108 @@ spec:
         app: k8s-handout
     spec:
       containers:
-      - name: app
-        image: node:20-slim
-        command: ["sh", "-c"]
-        args:
-        - |
-          # Create a persistent node_modules cache
-          mkdir -p /node_modules_cache
-          
-          # Initial setup and start
-          while [ ! -d /src/code ]; do echo "Waiting for initial sync..."; sleep 5; done
-          CURRENT_REF=$(readlink -f /src/code)
-          cd "$CURRENT_REF"
-          ln -sfn /node_modules_cache node_modules
-          npm install --silent && npm run build
-          echo "Starting initial server version..."
-          node server.js &
-          PID=$!
-
-          while true; do
-            # Wait for git-sync to switch the 'code' symlink to a NEW directory
-            while [ "$(readlink -f /src/code)" = "$CURRENT_REF" ]; do
-              sleep 15
-            done
-            
-            NEW_REF=$(readlink -f /src/code)
-            echo "New code detected at $NEW_REF. Building in background..."
-            
-            # Prepare the NEW version while the OLD one is still running
-            cd "$NEW_REF"
-            rm -rf node_modules
-            ln -sfn /node_modules_cache node_modules
-            
-            # Build the new version (the old server is still responding to requests!)
-            npm install --silent
-            npm run build
-            
-            echo "Build finished. Swapping server processes..."
-            # Now that the new build is ready, kill the old one and start the new one
-            kill $PID
-            wait $PID 2>/dev/null
-            
-            node server.js &
-            PID=$!
-            CURRENT_REF=$NEW_REF
-            echo "Update complete. New version is live."
-          done
-        env:
-        - name: DB_HOST
-          value: "mariadb"
-        - name: DB_NAME
-          valueFrom:
-            secretKeyRef:
-              name: handout-db-secret
-              key: db-name
-        - name: DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: handout-db-secret
-              key: db-user
-        - name: DB_PASS
-          valueFrom:
-            secretKeyRef:
-              name: handout-db-secret
-              key: db-password
-        - name: PORT
-          value: "3000"
-        ports:
-        - containerPort: 3000
-        # HEALTH CHECKS
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 3000
-          initialDelaySeconds: 60
-          periodSeconds: 20
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 3000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        # RESOURCES (Needed for HPA)
-        resources:
-          requests:
-            cpu: 100m
-            memory: 256Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
-        volumeMounts:
-        - name: code-volume
-          mountPath: /src
-      - name: git-sync
-        image: registry.k8s.io/git-sync/git-sync:v4.2.1
-        args:
-        - --repo=$(GIT_REPO_URL)
-        - --branch=main
-        - --wait=60
-        - --root=/src
-        - --link=code
-        env:
-        - name: GIT_REPO_URL
-          valueFrom:
-            secretKeyRef:
-              name: handout-git-secret
-              key: repo-url
-        volumeMounts:
-        - name: code-volume
-          mountPath: /src
+        - name: app
+          image: node:20-slim
+          command: ["sh", "-c"]
+          args:
+            - |
+              # Ensure health state is clean on start
+              rm -f /tmp/healthy
+              
+              # Initial setup and start
+              while [ ! -d /src/code ]; do echo "Waiting for initial sync..."; sleep 2; done
+              CURRENT_REF=$(readlink -f /src/code)
+              cd "$CURRENT_REF"
+              
+              # Isolate node_modules per release to prevent active app crashes
+              npm install --silent && npm run build
+              echo "Starting initial server version..."
+              node server.js &
+              PID=$!
+              
+              # Mark as healthy now that server is up
+              touch /tmp/healthy
+              
+              while true; do
+                while [ "$(readlink -f /src/code)" = "$CURRENT_REF" ]; do
+                  sleep 5
+                done
+              
+                NEW_REF=$(readlink -f /src/code)
+                echo "New code detected at $NEW_REF. Building..."
+              
+                cd "$NEW_REF"
+                # Build independently without breaking the running process's dependencies
+                npm install --silent && npm run build
+              
+                echo "Build finished. Pulling traffic before process swap..."
+                # 1. REMOVE the health file FIRST. Kubernetes will stop routing traffic here.
+                rm -f /tmp/healthy
+              
+                # 2. Give Kubernetes a brief window to process the unready status
+                sleep 5
+              
+                # 3. Swap the processes safely
+                kill $PID
+                wait $PID 2>/dev/null
+              
+                node server.js &
+                PID=$!
+                CURRENT_REF=$NEW_REF
+              
+                # 4. Mark as healthy again
+                touch /tmp/healthy
+                echo "Update complete. New version is live."
+              done
+          env:
+            - name: DB_HOST
+              value: "mariadb"
+            - name: PORT
+              value: "3000"
+          ports:
+            - containerPort: 3000
+          # MODIFIED PROBES: Using exec mechanism to look at our health state file
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - cat
+                - /tmp/healthy
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            failureThreshold: 1
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: code-volume
+              mountPath: /src
+        - name: git-sync
+          image: registry.k8s.io/git-sync/git-sync:v4.2.1
+          args:
+            - --repo=$(GIT_REPO_URL)
+            - --branch=main
+            - --wait=15
+            - --root=/src
+            - --link=code
+          env:
+            - name: GIT_REPO_URL
+              valueFrom:
+                secretKeyRef:
+                  name: handout-git-secret
+                  key: repo-url
+          volumeMounts:
+            - name: code-volume
+              mountPath: /src
       volumes:
-      - name: code-volume
-        emptyDir: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: k8s-handout-service
-spec:
-  ports:
-  - port: 80
-    targetPort: 3000
-  selector:
-    app: k8s-handout
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: k8s-handout-hpa
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: k8s-handout-app
-  minReplicas: 1
-  maxReplicas: 10
-  metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 50
+        - name: code-volume
+          emptyDir: {}
