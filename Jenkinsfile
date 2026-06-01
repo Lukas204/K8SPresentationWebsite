@@ -21,19 +21,16 @@ spec:
         stage('Build & Push to Local Registry') {
             steps {
                 container('kaniko') {
-                    // Kaniko compiles your Dockerfile and pushes it directly to the in-cluster registry
-                    sh '/kaniko/executor --context=dir://. --dockerfile=Dockerfile --destination=local-registry.default.svc.cluster.local:5000/k8s-handout-app:${BUILD_NUMBER} --insecure --insecure-pull'
+                    // Using double quotes (") allows Jenkins to insert the absolute path of ${WORKSPACE}
+                    sh "/kaniko/executor --context=${WORKSPACE} --dockerfile=${WORKSPACE}/Dockerfile --destination=local-registry.default.svc.cluster.local:5000/k8s-handout-app:${BUILD_NUMBER} --insecure --insecure-pull"
                 }
             }
         }
         stage('Deploy Rollout') {
             steps {
                 container('kubectl') {
-                    // Update the deployment with the exact image tag built in the previous step
-                    sh 'kubectl set image deployment/k8s-handout-app app=local-registry.default.svc.cluster.local:5000/k8s-handout-app:${BUILD_NUMBER}'
-
-                    // Force K8s to watch and verify the zero-downtime rollout succeeds
-                    sh 'kubectl rollout status deployment/k8s-handout-app'
+                    sh "kubectl set image deployment/k8s-handout-app app=local-registry.default.svc.cluster.local:5000/k8s-handout-app:${BUILD_NUMBER}"
+                    sh "kubectl rollout status deployment/k8s-handout-app"
                 }
             }
         }
