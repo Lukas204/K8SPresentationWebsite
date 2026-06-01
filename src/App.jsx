@@ -85,7 +85,7 @@ function App() {
             </article>
             <article className="card">
               <div className="card-img">
-                <img src="https://opensource.com/sites/default/files/styles/image_full/public/lead-images/kubernetes_cheat_sheet.png?itok=3vN9-f7P" alt="Kubernetes Cheat Sheet" />
+                <img src="https://opensource.com/sites/default/files/styles/medium/public/pictures/osdc_cheatsheet-kubernetes-2021.4.16.png?itok=BUvxtu5X" alt="Kubernetes Cheat Sheet" />
               </div>
               <div className="card-content">
                 <h3>Kubernetes Cheat Sheet</h3>
