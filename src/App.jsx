@@ -10,7 +10,9 @@ function App() {
   const [comments, setComments] = useState([]);
   const [author, setAuthor] = useState('');
   const [content, setContent] = useState('');
-  const [showModal, setShowModal] = useState(false);
+
+  // FIXED: Renamed state variables to match your modal logic below
+  const [modalImage, setModalImage] = useState(null);
 
   useEffect(() => {
     fetchComments();
@@ -48,59 +50,67 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <Navbar />
+      <div className="app">
+        <Navbar />
 
-      {showModal && (
-        <div 
-          className="modal-overlay" 
-          onClick={() => setShowModal(false)}
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'rgba(0,0,0,0.85)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 2000,
-            cursor: 'zoom-out'
-          }}
-        >
-          <img 
-            src="https://kubernetes.io/images/docs/kubernetes-cluster-architecture.svg" 
-            alt="Offizielle K8s Architektur Vergrößert"
-            style={{ maxWidth: '90%', maxHeight: '90%', backgroundColor: 'white', padding: '20px', borderRadius: '8px' }}
+        {modalImage && (
+            <div
+                className="modal-overlay"
+                onClick={() => setModalImage(null)}
+                style={{
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: 'rgba(0,0,0,0.85)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: 2000,
+                  cursor: 'zoom-out'
+                }}
+            >
+              <img
+                  src={modalImage}
+                  alt="Architektur Grossansicht"
+                  onClick={(e) => e.stopPropagation()}
+                  style={{
+                    maxWidth: '90%',
+                    maxHeight: '90%',
+                    objectFit: 'contain',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
+                    cursor: 'default'
+                  }}
+              />
+            </div>
+        )}
+
+        <Header />
+
+        <main>
+          <ArchitectureSection onOpenModal={(url) => setModalImage(url)} />
+          <LiteratureSection />
+          <KaaSSection />
+          <CommentSection
+              comments={comments}
+              author={author}
+              setAuthor={setAuthor}
+              content={content}
+              setContent={setContent}
+              handleSubmit={handleSubmit}
           />
-        </div>
-      )}
+        </main>
 
-      <Header />
-
-      <main>
-        <ArchitectureSection onOpenModal={() => setShowModal(true)} />
-        <LiteratureSection />
-        <KaaSSection />
-        <CommentSection 
-          comments={comments}
-          author={author}
-          setAuthor={setAuthor}
-          content={content}
-          setContent={setContent}
-          handleSubmit={handleSubmit}
-        />
-      </main>
-
-      <footer>
-        <p>© 2026 Kubernetes Präsentation • Lukas</p>
-        <div className="legal-links" style={{ marginTop: '1rem' }}>
-          <a href="https://legal.michelstinkt.win/impressum.html" target="_blank" rel="noopener noreferrer">Impressum</a>
-          <a href="https://legal.michelstinkt.win/datenschutz.html" target="_blank" rel="noopener noreferrer">Datenschutz</a>
-        </div>
-      </footer>
-    </div>
+        <footer>
+          <p>© 2026 Kubernetes Präsentation • Lukas</p>
+          <div className="legal-links" style={{ marginTop: '1rem' }}>
+            <a href="https://legal.michelstinkt.win/impressum.html" target="_blank" rel="noopener noreferrer">Impressum</a>
+            <a href="https://legal.michelstinkt.win/datenschutz.html" target="_blank" rel="noopener noreferrer">Datenschutz</a>
+          </div>
+        </footer>
+      </div>
   );
 }
 
