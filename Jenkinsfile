@@ -34,8 +34,8 @@ spec:
                 container('kubectl') {
                     // Running under root, this will now execute flawlessly
                     sh "kubectl apply -f k8s/app.yaml"
-                    sh "kubectl set image deployment/k8s-handout-app app=local-registry.default.svc.cluster.local:5000/k8s-handout-app:${BUILD_NUMBER}"
-                    sh "kubectl rollout status deployment/k8s-handout-app"
+                    sh "kubectl set image deployment/k8s-handout-app app=local-registry.default.svc.cluster.local:5000/k8s-handout-app:${BUILD_NUMBER} -n default"
+                    sh "kubectl rollout status deployment/k8s-handout-app -n default"
                 }
             }
         }
