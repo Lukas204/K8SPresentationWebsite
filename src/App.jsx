@@ -7,6 +7,9 @@ function App() {
 
   useEffect(() => {
     fetchComments();
+    // Auto-Refresh: Alle 5 Sekunden nach neuen Kommentaren suchen
+    const interval = setInterval(fetchComments, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   const fetchComments = async () => {
