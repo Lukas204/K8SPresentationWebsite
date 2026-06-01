@@ -26,7 +26,7 @@ spec:
                 }
             }
         }
-        sstage('Deploy Rollout') {
+        stage('Deploy Rollout') {
              steps {
                  container('kubectl') {
                      // 1. Apply the manifest layout (sets up services, HPA, and deployment base)
