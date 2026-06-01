@@ -54,6 +54,21 @@ const LiteratureSection = () => (
           <a href="https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2022/06_APP_Anwendungen/APP_4_4_Kubernetes_Edition_2022.pdf?__blob=publicationFile&v=3" className="card-link" target="_blank" rel="noopener noreferrer">BSI Baustein öffnen</a>
         </div>
       </article>
+
+      <article className="card">
+        <div className="card-img">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/67/Kubernetes_logo.svg" alt="BSI IT-Grundschutz" style={{ padding: '20px', objectFit: 'contain', backgroundColor: '#f5f5f5' }} />
+        </div>
+        <div className="card-img" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', backgroundColor: '#326CE5' }}>
+          <span style={{ fontSize: '3rem', color: 'white' }}>K8s</span>
+        </div>
+        <div className="card-content">
+          <h3>Kubernetes Dokumentation</h3>
+          <p>Die offizielle Dokumentation für Kubernetes.</p>
+          <span className="badge">Englisch</span>
+          <a href="https://kubernetes.io/docs/home/" className="card-link" target="_blank" rel="noopener noreferrer">Offizielle Dokumentation öffnen</a>
+        </div>
+      </article>
     </div>
   </section>
 );
