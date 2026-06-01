@@ -11,7 +11,7 @@ const ArchitectureSection = ({ onOpenModal }) => (
         <img 
           src="https://kubernetes.io/images/docs/kubernetes-cluster-architecture.svg" 
           alt="Offizielle Architektur" 
-          onClick={onOpenModal}
+          onClick={onOpenModal("https://kubernetes.io/images/docs/kubernetes-cluster-architecture.svg")}
           style={{ 
             maxWidth: '100%', 
             height: 'auto', 
@@ -35,7 +35,7 @@ const ArchitectureSection = ({ onOpenModal }) => (
         <p style={{ marginBottom: '1.5rem' }}>Visualisierung der konkreten Implementierung inkl. Cloudflare, HPA und git-sync:</p>
         <img 
           src="https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Lukas204/K8SPresentationWebsite/main/architecture.puml"
-          onClick={onOpenModal}
+          onClick={onOpenModal("https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Lukas204/K8SPresentationWebsite/main/architecture.puml")}
           alt="Projekt Architektur"
           style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.1)', cursor: 'zoom-in'}}
         />
