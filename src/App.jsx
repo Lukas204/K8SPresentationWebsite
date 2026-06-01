@@ -79,7 +79,7 @@ function App() {
                 <h3>Kubernetes (3. Auflage)</h3>
                 <p>Stefan Kert, Hans-Jürgen Wolter (dpunkt.verlag)</p>
                 <span className="badge">Deutsch</span>
-                <span className="badge">HAW Bibliothek verfügbar</span>
+                <span className="badge">HAW Bibliothek verfügbar (Online)</span>
                 <a href="https://dpunkt.de/produkt/kubernetes-3/" className="card-link" target="_blank" rel="noopener noreferrer">Details beim Verlag</a>
               </div>
             </article>
