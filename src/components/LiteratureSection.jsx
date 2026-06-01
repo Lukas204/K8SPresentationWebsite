@@ -51,7 +51,7 @@ const LiteratureSection = () => (
           <p>Offizieller Sicherheitsbaustein APP.4.4 für Kubernetes-Cluster.</p>
           <span className="badge">Deutsch</span>
           <span className="badge">Sicherheit</span>
-          <a href="https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2022/06_APP_Anwendungen/APP_4_4_Kubernetes_Edition_2022.pdf" className="card-link" target="_blank" rel="noopener noreferrer">BSI Baustein öffnen</a>
+          <a href="https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2022/06_APP_Anwendungen/APP_4_4_Kubernetes_Edition_2022.pdf?__blob=publicationFile&v=3" className="card-link" target="_blank" rel="noopener noreferrer">BSI Baustein öffnen</a>
         </div>
       </article>
     </div>
