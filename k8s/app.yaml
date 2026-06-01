@@ -18,30 +18,43 @@ spec:
         command: ["sh", "-c"]
         args:
         - |
-          cd /src
-          # Move node_modules to a persistent place outside the sync root to avoid git-sync permission errors
+          # Create a persistent node_modules cache
           mkdir -p /node_modules_cache
-          ln -s /node_modules_cache /src/code/node_modules
           
-          cd /src/code
-          npm install
-          npm run build
-          
-          # Start the server and watch for changes in the 'code' link (managed by git-sync)
-          # We use a simple loop to restart the server if the code changes
           while true; do
-            echo "Starting server..."
-            npm start &
-            PID=$!
-            # Wait for the symlink 'code' to point to a new directory
-            CURRENT_REF=$(readlink -f /src/code)
-            while [ "$(readlink -f /src/code)" = "$CURRENT_REF" ]; do
-              sleep 10
+            # Wait for git-sync to provide the code
+            while [ ! -d /src/code ]; do
+              echo "Waiting for code to be synced..."
+              sleep 5
             done
-            echo "New code detected, rebuilding..."
-            kill $PID
-            npm install
+            
+            # Identify the actual directory git-sync is pointing to
+            CURRENT_REF=$(readlink -f /src/code)
+            echo "Current code version: $CURRENT_REF"
+            
+            # Ensure node_modules exists as a symlink in the NEW directory
+            cd "$CURRENT_REF"
+            rm -rf node_modules
+            ln -sfn /node_modules_cache node_modules
+            
+            # Install and build
+            echo "Installing and building..."
+            npm install --silent
             npm run build
+            
+            echo "Starting server..."
+            # Start in background and save PID
+            node server.js &
+            PID=$!
+            
+            # Wait for git-sync to switch the 'code' symlink to a NEW directory
+            while [ "$(readlink -f /src/code)" = "$CURRENT_REF" ]; do
+              sleep 15
+            done
+            
+            echo "New code detected at $(readlink -f /src/code). Cleaning up old server..."
+            kill $PID
+            wait $PID 2>/dev/null
           done
         env:
         - name: DB_HOST

@@ -43,6 +43,16 @@ function App() {
       <header>
         <h1>Kubernetes Handout</h1>
         <p>Begleitmaterialien und weiterführende Informationen zur Präsentation</p>
+        <div style={{ marginTop: '1rem' }}>
+          <a 
+            href="https://github.com/Lukas204/K8SPresentationWebsite" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ color: 'white', textDecoration: 'underline', fontSize: '0.9rem' }}
+          >
+            GitHub Repository ansehen
+          </a>
+        </div>
       </header>
 
       <main>

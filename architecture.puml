@@ -1,60 +1,78 @@
 @startuml
 !theme plain
 skinparam componentStyle rectangle
+skinparam backgroundColor #fcfcfc
+skinparam Nodesep 60
+skinparam Ranksep 50
 
-actor "User" as user
+' Colors & Styles
+skinparam rectangle {
+    BackgroundColor<<External>> #e1f5fe
+    BackgroundColor<<Security>> #fff9c4
+    BackgroundColor<<K8s>> #e3f2fd
+    BackgroundColor<<App>> #ffffff
+    BorderColor<<K8s>> #326CE5
+}
 
-package "Internet" {
+header Kubernetes Presentation Handout Architecture
+footer Stand: 2026
+
+actor "Benutzer" as user #white
+
+rectangle "Extern / Internet" <<External>> {
+    [GitHub Repository] as git #white
+}
+
+rectangle "Cloudflare Security" <<Security>> {
     [Cloudflare Zero Trust] as cf
+    [Cloudflare Tunnel] as tunnel
 }
 
-package "Kubernetes Cluster" {
-    package "Networking" {
-        [Cloudflare Tunnel Pod] as tunnel
-        [Nginx Ingress] as ingress <<Rate Limited>>
-        [App Service] as svc
+rectangle "Kubernetes Cluster" <<K8s>> {
+    
+    rectangle "Networking" {
+        [Nginx Ingress] as ingress #white
+        [App Service] as svc #white
     }
 
-    package "Application Pod (ReplicaSet / HPA)" {
-        component "Main Container" as app {
-            [Node.js / Express]
-            [React Frontend]
+    rectangle "Application Pod" <<App>> {
+        package "Containers" {
+            [Node.js / React] as app #white
+            [git-sync] as gitsync #white
         }
-        component "Sidecar Container" as gitsync {
-            [git-sync]
-        }
+        storage "Shared Volume" as shared
     }
 
-    package "Database" {
-        [MariaDB Pod] as db
-        database "Persistent Volume" as pvc
+    rectangle "Database Tier" {
+        database "MariaDB" as db #white
+        storage "Persistent Volume" as pvc #white
     }
 }
 
-package "External Source" {
-    [GitHub Repository] as git
-}
+' Relations
+user -down-> cf : HTTPS
+cf -down-> tunnel : Tunneling
+tunnel -down-> ingress : API Traffic
 
-user --> cf : HTTPS
-cf --> tunnel : Secure Tunnel
-tunnel --> ingress : Internal Traffic
-ingress --> svc : Route
-svc --> app : Load Balance (1-10 Pods)
+ingress -down-> svc
+svc -down-> app : Round Robin
 
-gitsync <-left-> git : Periodic Sync
-gitsync -right-> app : Shared Volume (Code)
+gitsync -up-> git : Watch & Pull
+gitsync -down-> shared : Update Code
+shared -up-> app : Serve Code
 
-app --> db : SQL Query
+app -down-> db : Read/Write
 db -down-> pvc : Data Persistence
 
 note right of ingress
-  Rate Limit: 5 RPS
+  <b>Rate Limit</b>
+  5 Requests / s
   Burst: 10
 end note
 
-note top of app
-  HPA: 1-10 Replicas
-  Target CPU: 50%
+note right of gitsync
+  <b>Auto-Update</b>
+  Period: 60s
 end note
 
 @enduml
