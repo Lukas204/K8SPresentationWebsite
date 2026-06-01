@@ -13,17 +13,67 @@
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-family);
   line-height: 1.6;
   color: var(--text-color);
   background-color: var(--light-grey);
+  padding-top: 60px; /* Space for sticky nav */
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--dark-grey);
+  color: white;
+  z-index: 1001;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.nav-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--k8s-blue);
+}
+
+.nav-brand {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--k8s-blue);
+  text-decoration: none;
 }
 
 header {
   background-color: var(--k8s-blue);
   color: var(--white);
-  padding: 3rem 1rem;
+  padding: 4rem 1rem;
   text-align: center;
 }
 
