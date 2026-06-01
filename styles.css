@@ -4,7 +4,7 @@
     --light-grey: #f6f8fa;
     --white: #ffffff;
     --text-color: #333333;
-    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -70,6 +70,8 @@ h2 {
     transition: transform 0.2s;
     display: flex;
     flex-direction: column;
+    text-decoration: none;
+    color: inherit;
 }
 
 .card:hover {
