@@ -59,9 +59,6 @@ const LiteratureSection = () => (
         <div className="card-img">
           <img src="https://upload.wikimedia.org/wikipedia/commons/6/67/Kubernetes_logo.svg" alt="BSI IT-Grundschutz" style={{ padding: '20px', objectFit: 'contain', backgroundColor: '#f5f5f5' }} />
         </div>
-        <div className="card-img" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', backgroundColor: '#326CE5' }}>
-          <span style={{ fontSize: '3rem', color: 'white' }}>K8s</span>
-        </div>
         <div className="card-content">
           <h3>Kubernetes Dokumentation</h3>
           <p>Die offizielle Dokumentation für Kubernetes.</p>
