@@ -86,44 +86,42 @@ function App() {
       </header>
 
       <main>
-        <section id="kaas" className="summary-section" style={{ marginBottom: '3rem' }}>
-          <h2>Kubernetes as a Service (KaaS)</h2>
-          <p style={{ marginBottom: '1.5rem' }}>
-            Managed Kubernetes-Lösungen nehmen dem Nutzer die Verwaltung der Control Plane ab. Da auch die Worker Nodes in der Cloud laufen und ein cloudbasierter Load Balancer die Verkehrsverteilung übernimmt, verbleibt der gesamte Infrastruktur-Aufwand beim Provider. Hier sind die drei marktführenden Anbieter:
-          </p>
-          <div className="literature-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
-            <article className="card">
-              <div className="card-img" style={{ padding: '40px' }}>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS Logo" style={{ height: '80px', width: 'auto' }} />
-              </div>
-              <div className="card-content">
-                <h3>Amazon EKS</h3>
-                <p>Elastic Kubernetes Service - Der Marktführer mit tiefer AWS-Integration.</p>
-                <a href="https://aws.amazon.com/eks/" className="card-link" target="_blank" rel="noopener noreferrer">Zu AWS EKS</a>
-              </div>
-            </article>
 
-            <article className="card">
-              <div className="card-img" style={{ padding: '40px' }}>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" alt="Google Cloud Logo" style={{ height: '80px', width: 'auto' }} />
-              </div>
-              <div className="card-content">
-                <h3>Google GKE</h3>
-                <p>Google Kubernetes Engine - Pionier der K8s-Technologie mit höchstem Automatisierungsgrad.</p>
-                <a href="https://cloud.google.com/kubernetes-engine" className="card-link" target="_blank" rel="noopener noreferrer">Zu Google GKE</a>
-              </div>
-            </article>
+        <section id="official-architecture" className="summary-section">
+          <h2>Offizielle K8s-Architektur</h2>
+          <div className="architecture-container" style={{ textAlign: 'center', marginTop: '1rem' }}>
+            <p style={{ marginBottom: '0.5rem' }}>Das konzeptionelle Modell eines Kubernetes-Clusters:</p>
+            <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: '1rem' }}>(Zum Vergrößern auf das Bild klicken)</p>
+            <img
+                src="https://kubernetes.io/images/docs/kubernetes-cluster-architecture.svg"
+                alt="Offizielle Kubernetes Cluster Architektur"
+                onClick={() => setShowModal(true)}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                  padding: '20px',
+                  background: 'white',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                  cursor: 'zoom-in'
+                }}
+            />
+            <p className="summary-placeholder" style={{ marginTop: '1rem', fontSize: '0.75rem' }}>
+              Grafik von <a href="https://kubernetes.io/docs/concepts/architecture/" target="_blank" rel="noopener noreferrer">The Kubernetes Authors</a>, lizenziert unter <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
+            </p>
+          </div>
+        </section>
 
-            <article className="card">
-              <div className="card-img" style={{ padding: '40px' }}>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg" alt="Azure Logo" style={{ height: '80px', width: 'auto' }} />
-              </div>
-              <div className="card-content">
-                <h3>Azure AKS</h3>
-                <p>Azure Kubernetes Service - Optimale Wahl für Unternehmen mit Microsoft-Ökosystem.</p>
-                <a href="https://azure.microsoft.com/services/kubernetes-service/" className="card-link" target="_blank" rel="noopener noreferrer">Zu Azure AKS</a>
-              </div>
-            </article>
+        <section id="summary" className="summary-section">
+          <h2>Zusammenfassung der Slides</h2>
+          <div className="summary-placeholder">
+            <p>An dieser Stelle wird später eine detaillierte Zusammenfassung der Präsentations-Slides eingefügt.</p>
+            <ul>
+              <li>Grundlagen & Architektur</li>
+              <li>Objekte (Pods, Services, Deployments)</li>
+              <li>Networking & Storage</li>
+              <li>Deployment-Strategien</li>
+            </ul>
           </div>
         </section>
 
@@ -169,19 +167,6 @@ function App() {
           </div>
         </section>
 
-        <section id="summary" className="summary-section">
-          <h2>Zusammenfassung der Slides</h2>
-          <div className="summary-placeholder">
-            <p>An dieser Stelle wird später eine detaillierte Zusammenfassung der Präsentations-Slides eingefügt.</p>
-            <ul>
-              <li>Grundlagen & Architektur</li>
-              <li>Objekte (Pods, Services, Deployments)</li>
-              <li>Networking & Storage</li>
-              <li>Deployment-Strategien</li>
-            </ul>
-          </div>
-        </section>
-
         <section id="architecture" className="summary-section">
           <h2>System-Architektur (Dieses Projekt)</h2>
           <div className="architecture-container" style={{ textAlign: 'center', marginTop: '1rem' }}>
@@ -197,28 +182,44 @@ function App() {
           </div>
         </section>
 
-        <section id="official-architecture" className="summary-section">
-          <h2>Offizielle K8s-Architektur</h2>
-          <div className="architecture-container" style={{ textAlign: 'center', marginTop: '1rem' }}>
-            <p style={{ marginBottom: '0.5rem' }}>Das konzeptionelle Modell eines Kubernetes-Clusters:</p>
-            <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: '1rem' }}>(Zum Vergrößern auf das Bild klicken)</p>
-            <img 
-              src="https://kubernetes.io/images/docs/kubernetes-cluster-architecture.svg" 
-              alt="Offizielle Kubernetes Cluster Architektur" 
-              onClick={() => setShowModal(true)}
-              style={{ 
-                maxWidth: '100%', 
-                height: 'auto', 
-                padding: '20px', 
-                background: 'white', 
-                borderRadius: '8px', 
-                boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-                cursor: 'zoom-in'
-              }}
-            />
-            <p className="summary-placeholder" style={{ marginTop: '1rem', fontSize: '0.75rem' }}>
-              Grafik von <a href="https://kubernetes.io/docs/concepts/architecture/" target="_blank" rel="noopener noreferrer">The Kubernetes Authors</a>, lizenziert unter <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
-            </p>
+        <section id="kaas" className="summary-section" style={{ marginBottom: '3rem' }}>
+          <h2>Kubernetes as a Service (KaaS)</h2>
+          <p style={{ marginBottom: '1.5rem' }}>
+            Managed Kubernetes-Lösungen nehmen dem Nutzer die Verwaltung der Control Plane ab. Da auch die Worker Nodes in der Cloud laufen und ein cloudbasierter Load Balancer die Verkehrsverteilung übernimmt, verbleibt der gesamte Infrastruktur-Aufwand beim Provider. Hier sind die drei marktführenden Anbieter:
+          </p>
+          <div className="literature-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
+            <article className="card">
+              <div className="card-img" style={{ padding: '40px' }}>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS Logo" style={{ height: '80px', width: 'auto' }} />
+              </div>
+              <div className="card-content">
+                <h3>Amazon EKS</h3>
+                <p>Elastic Kubernetes Service - Der Marktführer mit tiefer AWS-Integration.</p>
+                <a href="https://aws.amazon.com/eks/" className="card-link" target="_blank" rel="noopener noreferrer">Zu AWS EKS</a>
+              </div>
+            </article>
+
+            <article className="card">
+              <div className="card-img" style={{ padding: '40px' }}>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" alt="Google Cloud Logo" style={{ height: '80px', width: 'auto' }} />
+              </div>
+              <div className="card-content">
+                <h3>Google GKE</h3>
+                <p>Google Kubernetes Engine - Pionier der K8s-Technologie mit höchstem Automatisierungsgrad.</p>
+                <a href="https://cloud.google.com/kubernetes-engine" className="card-link" target="_blank" rel="noopener noreferrer">Zu Google GKE</a>
+              </div>
+            </article>
+
+            <article className="card">
+              <div className="card-img" style={{ padding: '40px' }}>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg" alt="Azure Logo" style={{ height: '80px', width: 'auto' }} />
+              </div>
+              <div className="card-content">
+                <h3>Azure AKS</h3>
+                <p>Azure Kubernetes Service - Optimale Wahl für Unternehmen mit Microsoft-Ökosystem.</p>
+                <a href="https://azure.microsoft.com/services/kubernetes-service/" className="card-link" target="_blank" rel="noopener noreferrer">Zu Azure AKS</a>
+              </div>
+            </article>
           </div>
         </section>
 
