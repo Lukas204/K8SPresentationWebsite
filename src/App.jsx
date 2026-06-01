@@ -59,6 +59,48 @@ function App() {
       </header>
 
       <main>
+        <section id="kaas" className="summary-section" style={{ marginBottom: '3rem' }}>
+          <h2>Kubernetes as a Service (KaaS)</h2>
+          <p style={{ marginBottom: '1.5rem' }}>
+            Managed Kubernetes-Lösungen nehmen dem Nutzer die komplexe Verwaltung der Control Plane ab. 
+            Hier sind die drei marktführenden Anbieter:
+          </p>
+          <div className="literature-grid">
+            <article className="card">
+              <div className="card-img" style={{ padding: '20px' }}>
+                <img src="https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png" alt="AWS Logo" style={{ maxHeight: '100px' }} />
+              </div>
+              <div className="card-content">
+                <h3>Amazon EKS</h3>
+                <p>Elastic Kubernetes Service - Der Marktführer mit tiefer AWS-Integration.</p>
+                <a href="https://aws.amazon.com/eks/" className="card-link" target="_blank" rel="noopener noreferrer">Zu AWS EKS</a>
+              </div>
+            </article>
+
+            <article className="card">
+              <div className="card-img" style={{ padding: '20px' }}>
+                <img src="https://www.gstatic.com/devrel-devsite/prod/v7739958197771746f32e2938f38c642630f5ec81125f462a71d7986791e3e788/cloud/images/cloud-logo.svg" alt="Google Cloud Logo" style={{ maxHeight: '100px' }} />
+              </div>
+              <div className="card-content">
+                <h3>Google GKE</h3>
+                <p>Google Kubernetes Engine - Pionier der K8s-Technologie mit höchstem Automatisierungsgrad.</p>
+                <a href="https://cloud.google.com/kubernetes-engine" className="card-link" target="_blank" rel="noopener noreferrer">Zu Google GKE</a>
+              </div>
+            </article>
+
+            <article className="card">
+              <div className="card-img" style={{ padding: '20px' }}>
+                <img src="https://swimburger.net/media/pp0gsjje/azure.png" alt="Azure Logo" style={{ maxHeight: '100px' }} />
+              </div>
+              <div className="card-content">
+                <h3>Azure AKS</h3>
+                <p>Azure Kubernetes Service - Optimale Wahl für Unternehmen mit Microsoft-Ökosystem.</p>
+                <a href="https://azure.microsoft.com/services/kubernetes-service/" className="card-link" target="_blank" rel="noopener noreferrer">Zu Azure AKS</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
         <section id="literature">
           <h2>Weiterführende Literatur</h2>
           <div className="literature-grid">
