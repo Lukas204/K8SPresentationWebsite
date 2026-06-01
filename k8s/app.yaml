@@ -21,40 +21,43 @@ spec:
           # Create a persistent node_modules cache
           mkdir -p /node_modules_cache
           
+          # Initial setup and start
+          while [ ! -d /src/code ]; do echo "Waiting for initial sync..."; sleep 5; done
+          CURRENT_REF=$(readlink -f /src/code)
+          cd "$CURRENT_REF"
+          ln -sfn /node_modules_cache node_modules
+          npm install --silent && npm run build
+          echo "Starting initial server version..."
+          node server.js &
+          PID=$!
+
           while true; do
-            # Wait for git-sync to provide the code
-            while [ ! -d /src/code ]; do
-              echo "Waiting for code to be synced..."
-              sleep 5
-            done
-            
-            # Identify the actual directory git-sync is pointing to
-            CURRENT_REF=$(readlink -f /src/code)
-            echo "Current code version: $CURRENT_REF"
-            
-            # Ensure node_modules exists as a symlink in the NEW directory
-            cd "$CURRENT_REF"
-            rm -rf node_modules
-            ln -sfn /node_modules_cache node_modules
-            
-            # Install and build
-            echo "Installing and building..."
-            npm install --silent
-            npm run build
-            
-            echo "Starting server..."
-            # Start in background and save PID
-            node server.js &
-            PID=$!
-            
             # Wait for git-sync to switch the 'code' symlink to a NEW directory
             while [ "$(readlink -f /src/code)" = "$CURRENT_REF" ]; do
               sleep 15
             done
             
-            echo "New code detected at $(readlink -f /src/code). Cleaning up old server..."
+            NEW_REF=$(readlink -f /src/code)
+            echo "New code detected at $NEW_REF. Building in background..."
+            
+            # Prepare the NEW version while the OLD one is still running
+            cd "$NEW_REF"
+            rm -rf node_modules
+            ln -sfn /node_modules_cache node_modules
+            
+            # Build the new version (the old server is still responding to requests!)
+            npm install --silent
+            npm run build
+            
+            echo "Build finished. Swapping server processes..."
+            # Now that the new build is ready, kill the old one and start the new one
             kill $PID
             wait $PID 2>/dev/null
+            
+            node server.js &
+            PID=$!
+            CURRENT_REF=$NEW_REF
+            echo "Update complete. New version is live."
           done
         env:
         - name: DB_HOST
