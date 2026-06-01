@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-handout-app
+  namespace: default
+spec:
+  # Replicas managed dynamically by HPA
+  selector:
+    matchLabels:
+      app: k8s-handout
+  template:
+    metadata:
+      labels:
+        app: k8s-handout
+    spec:
+      containers:
+        - name: app
+          # Jenkins will automatically update this image tag during your build pipeline
+          image: local-registry.default.svc.cluster.local:5000/k8s-handout-app:latest
+          imagePullPolicy: Always
+          env:
+            - name: DB_HOST
+              value: "mariadb"
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: handout-db-secret
+                  key: db-name
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: handout-db-secret
+                  key: db-user
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: handout-db-secret
+                  key: db-password
+            - name: PORT
+              value: "3000"
+          ports:
+            - containerPort: 3000
+
+          # HEALTH CHECKS (Optimized for instant-start pre-compiled images)
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+          # RESOURCES (Balanced for standard production runtime)
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-handout-service
+  namespace: default
+spec:
+  ports:
+    - port: 80
+      targetPort: 3000
+  selector:
+    app: k8s-handout
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: k8s-handout-hpa
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: k8s-handout-app
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
