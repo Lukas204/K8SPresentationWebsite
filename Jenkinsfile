@@ -13,7 +13,7 @@ spec:
     args:
     - 99d
   - name: kubectl
-    image: alpine/k8s:1.29.2  # <-- Swapped from bitnami to alpine/k8s
+    image: alpine/k8s:1.29.2
     command:
     - sleep
     args:
@@ -21,6 +21,11 @@ spec:
 '''
         }
     }
+
+    triggers {
+        pollSCM('* * * * *')
+    }
+
     stages {
         stage('Build & Push to Local Registry') {
             steps {
@@ -32,7 +37,6 @@ spec:
         stage('Deploy Rollout') {
             steps {
                 container('kubectl') {
-                    // Running under root, this will now execute flawlessly
                     sh "kubectl apply -f k8s/app.yaml"
                     sh "kubectl set image deployment/k8s-handout-app app=local-registry.default.svc.cluster.local:5000/k8s-handout-app:${BUILD_NUMBER} -n default"
                     sh "kubectl rollout status deployment/k8s-handout-app -n default"
