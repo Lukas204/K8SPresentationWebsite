@@ -52,8 +52,8 @@ const LiteratureSection = () => (
       </a>
 
       <a href="https://kubernetes.io/docs/home/" className="card" target="_blank" rel="noopener noreferrer">
-        <div className="card-img" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', backgroundColor: '#326CE5' }}>
-          <span style={{ fontSize: '3rem', color: 'white' }}>K8s</span>
+        <div className="card-img">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/67/Kubernetes_logo.svg" alt="Kubernetes Dokumentation"/>
         </div>
         <div className="card-content">
           <h3>Kubernetes Dokumentation</h3>
