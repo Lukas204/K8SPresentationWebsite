@@ -95,7 +95,7 @@ function App() {
           <div className="literature-grid">
             <article className="card">
               <div className="card-img">
-                <img src="https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png" alt="AWS Logo" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS Logo" />
               </div>
               <div className="card-content">
                 <h3>Amazon EKS</h3>
@@ -106,7 +106,7 @@ function App() {
 
             <article className="card">
               <div className="card-img">
-                <img src="https://www.gstatic.com/devrel-devsite/prod/v7739958197771746f32e2938f38c642630f5ec81125f462a71d7986791e3e788/cloud/images/cloud-logo.svg" alt="Google Cloud Logo" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" alt="Google Cloud Logo" />
               </div>
               <div className="card-content">
                 <h3>Google GKE</h3>
@@ -117,7 +117,7 @@ function App() {
 
             <article className="card">
               <div className="card-img">
-                <img src="https://swimburger.net/media/pp0gsjje/azure.png" alt="Azure Logo" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg" alt="Azure Logo" />
               </div>
               <div className="card-content">
                 <h3>Azure AKS</h3>
