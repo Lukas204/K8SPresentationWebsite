@@ -112,7 +112,7 @@ function App() {
         </section>
 
         <section id="architecture" className="summary-section">
-          <h2>System-Architektur</h2>
+          <h2>System-Architektur (Dieses Projekt)</h2>
           <div className="architecture-container" style={{ textAlign: 'center', marginTop: '1rem' }}>
             <p style={{ marginBottom: '1.5rem' }}>Visualisierung des Kubernetes-Setups inkl. Cloudflare, HPA und git-sync:</p>
             <img 
@@ -122,6 +122,21 @@ function App() {
             />
             <p className="summary-placeholder" style={{ marginTop: '1rem', fontSize: '0.8rem' }}>
               Das Diagramm wird live via PlantUML aus der <code>architecture.puml</code> gerendert.
+            </p>
+          </div>
+        </section>
+
+        <section id="official-architecture" className="summary-section">
+          <h2>Offizielle K8s-Architektur</h2>
+          <div className="architecture-container" style={{ textAlign: 'center', marginTop: '1rem' }}>
+            <p style={{ marginBottom: '1.5rem' }}>Das konzeptionelle Modell eines Kubernetes-Clusters:</p>
+            <img 
+              src="https://kubernetes.io/images/docs/kubernetes-cluster-architecture.svg" 
+              alt="Offizielle Kubernetes Cluster Architektur" 
+              style={{ maxWidth: '100%', height: 'auto', padding: '20px', background: 'white', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}
+            />
+            <p className="summary-placeholder" style={{ marginTop: '1rem', fontSize: '0.75rem' }}>
+              Grafik von <a href="https://kubernetes.io/docs/concepts/architecture/" target="_blank" rel="noopener noreferrer">The Kubernetes Authors</a>, lizenziert unter <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
             </p>
           </div>
         </section>
