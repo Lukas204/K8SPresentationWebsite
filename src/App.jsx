@@ -89,8 +89,7 @@ function App() {
         <section id="kaas" className="summary-section" style={{ marginBottom: '3rem' }}>
           <h2>Kubernetes as a Service (KaaS)</h2>
           <p style={{ marginBottom: '1.5rem' }}>
-            Managed Kubernetes-Lösungen nehmen dem Nutzer die komplexe Verwaltung der Control Plane ab. 
-            Hier sind die drei marktführenden Anbieter:
+            Managed Kubernetes-Lösungen nehmen dem Nutzer die Verwaltung der Control Plane ab. Da auch die Worker Nodes in der Cloud laufen und ein cloudbasierter Load Balancer die Verkehrsverteilung übernimmt, verbleibt der gesamte Infrastruktur-Aufwand beim Provider. Hier sind die drei marktführenden Anbieter:
           </p>
           <div className="literature-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
             <article className="card">
