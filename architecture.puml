@@ -12,11 +12,12 @@ skinparam rectangle {
     BackgroundColor<<External>> #e1f5fe
     BackgroundColor<<Security>> #fff9c4
     BackgroundColor<<K8s>> #e3f2fd
+    BackgroundColor<<CICD>> #f3e5f5
     BackgroundColor<<App>> #ffffff
     BorderColor<<K8s>> #326CE5
 }
 
-header Kubernetes Presentation Handout Architecture
+header Kubernetes Presentation Handout Architecture (CI/CD Integrated)
 footer Stand: 2026
 
 ' 1. Linke Flanke: Datenquelle
@@ -43,14 +44,17 @@ rectangle "Kubernetes Cluster (KinD)" <<K8s>> {
         [App Service] as svc #white
     }
 
+    rectangle "CI/CD & Automation Tier" <<CICD>> {
+        [Jenkins Agent Pod\n(Kaniko & Kubectl)] as jenkins #white
+        [Local Registry\n(Port 5000)] as registry #white
+
+        note "<b>Poll SCM</b>\nIntervall: 1 min\nTrigger: * * * * *" as note_jenkins
+    }
+
     rectangle "Application Pod\n(k8s-handout-app)" <<App>> {
         package "Containers" {
-            [Node.js / React\n(Hot-Reload Skript)] as app #white
-            [git-sync\n(v4.2.1)] as gitsync #white
-
-            note "<b>Auto-Update</b>\nPeriod: 60s" as note_gitsync
+            [Node.js / Vite Server\n(Produktions-Image)] as app #white
         }
-        storage "Shared Volume\n(emptyDir)" as shared
     }
 
     rectangle "Database Tier" {
@@ -71,11 +75,13 @@ ing_rules .down.> tunnel : Routed via Tunnel
 tunnel -down-> svc : Direct Service Routing
 svc -down-> app : Round Robin (1-10 Replicas)
 
-' Relations - Code Sync (Jetzt sauber von links einfließend)
-git -down-> gitsync : Watch & Pull
-gitsync -down-> shared : Update Code
-shared -up-> app : Serve & Build Code
-gitsync -right- note_gitsync
+' Relations - CI/CD & Build Pipeline Flow
+git -down-> jenkins : 1. Poll SCM / Pull Code
+jenkins -down-> registry : 2. Kaniko Build & Push\n(Insecure HTTP Stream)
+jenkins -right-> app : 3. Kubectl Apply & Set Image\n(Dynamic :BUILD_NUMBER)
+registry -.up.> app : 4. KinD Node pullt Image\n(via containerd Live-Patch)
+
+jenkins -right- note_jenkins
 
 ' Relations - Internals (App -> DB & HPA)
 app -down-> db : Read/Write
