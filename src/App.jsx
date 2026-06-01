@@ -92,10 +92,10 @@ function App() {
             Managed Kubernetes-Lösungen nehmen dem Nutzer die komplexe Verwaltung der Control Plane ab. 
             Hier sind die drei marktführenden Anbieter:
           </p>
-          <div className="literature-grid">
+          <div className="literature-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
             <article className="card">
-              <div className="card-img">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS Logo" />
+              <div className="card-img" style={{ padding: '40px' }}>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS Logo" style={{ height: '80px', width: 'auto' }} />
               </div>
               <div className="card-content">
                 <h3>Amazon EKS</h3>
@@ -105,8 +105,8 @@ function App() {
             </article>
 
             <article className="card">
-              <div className="card-img">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" alt="Google Cloud Logo" />
+              <div className="card-img" style={{ padding: '40px' }}>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg" alt="Google Cloud Logo" style={{ height: '80px', width: 'auto' }} />
               </div>
               <div className="card-content">
                 <h3>Google GKE</h3>
@@ -116,8 +116,8 @@ function App() {
             </article>
 
             <article className="card">
-              <div className="card-img">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg" alt="Azure Logo" />
+              <div className="card-img" style={{ padding: '40px' }}>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg" alt="Azure Logo" style={{ height: '80px', width: 'auto' }} />
               </div>
               <div className="card-content">
                 <h3>Azure AKS</h3>
