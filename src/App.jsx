@@ -4,6 +4,7 @@ function App() {
   const [comments, setComments] = useState([]);
   const [author, setAuthor] = useState('');
   const [content, setContent] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetchComments();
@@ -43,6 +44,32 @@ function App() {
 
   return (
     <div className="app">
+      {showModal && (
+        <div 
+          className="modal-overlay" 
+          onClick={() => setShowModal(false)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0,0,0,0.85)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            cursor: 'zoom-out'
+          }}
+        >
+          <img 
+            src="https://kubernetes.io/images/docs/kubernetes-cluster-architecture.svg" 
+            alt="Offizielle K8s Architektur Vergrößert"
+            style={{ maxWidth: '90%', maxHeight: '90%', backgroundColor: 'white', padding: '20px', borderRadius: '8px' }}
+          />
+        </div>
+      )}
+
       <header>
         <h1>Kubernetes Handout</h1>
         <p>Begleitmaterialien und weiterführende Informationen zur Präsentation</p>
@@ -67,8 +94,8 @@ function App() {
           </p>
           <div className="literature-grid">
             <article className="card">
-              <div className="card-img" style={{ padding: '20px' }}>
-                <img src="https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png" alt="AWS Logo" style={{ maxHeight: '100px' }} />
+              <div className="card-img">
+                <img src="https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png" alt="AWS Logo" />
               </div>
               <div className="card-content">
                 <h3>Amazon EKS</h3>
@@ -78,8 +105,8 @@ function App() {
             </article>
 
             <article className="card">
-              <div className="card-img" style={{ padding: '20px' }}>
-                <img src="https://www.gstatic.com/devrel-devsite/prod/v7739958197771746f32e2938f38c642630f5ec81125f462a71d7986791e3e788/cloud/images/cloud-logo.svg" alt="Google Cloud Logo" style={{ maxHeight: '100px' }} />
+              <div className="card-img">
+                <img src="https://www.gstatic.com/devrel-devsite/prod/v7739958197771746f32e2938f38c642630f5ec81125f462a71d7986791e3e788/cloud/images/cloud-logo.svg" alt="Google Cloud Logo" />
               </div>
               <div className="card-content">
                 <h3>Google GKE</h3>
@@ -89,8 +116,8 @@ function App() {
             </article>
 
             <article className="card">
-              <div className="card-img" style={{ padding: '20px' }}>
-                <img src="https://swimburger.net/media/pp0gsjje/azure.png" alt="Azure Logo" style={{ maxHeight: '100px' }} />
+              <div className="card-img">
+                <img src="https://swimburger.net/media/pp0gsjje/azure.png" alt="Azure Logo" />
               </div>
               <div className="card-content">
                 <h3>Azure AKS</h3>
@@ -174,11 +201,21 @@ function App() {
         <section id="official-architecture" className="summary-section">
           <h2>Offizielle K8s-Architektur</h2>
           <div className="architecture-container" style={{ textAlign: 'center', marginTop: '1rem' }}>
-            <p style={{ marginBottom: '1.5rem' }}>Das konzeptionelle Modell eines Kubernetes-Clusters:</p>
+            <p style={{ marginBottom: '0.5rem' }}>Das konzeptionelle Modell eines Kubernetes-Clusters:</p>
+            <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: '1rem' }}>(Zum Vergrößern auf das Bild klicken)</p>
             <img 
               src="https://kubernetes.io/images/docs/kubernetes-cluster-architecture.svg" 
               alt="Offizielle Kubernetes Cluster Architektur" 
-              style={{ maxWidth: '100%', height: 'auto', padding: '20px', background: 'white', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}
+              onClick={() => setShowModal(true)}
+              style={{ 
+                maxWidth: '100%', 
+                height: 'auto', 
+                padding: '20px', 
+                background: 'white', 
+                borderRadius: '8px', 
+                boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                cursor: 'zoom-in'
+              }}
             />
             <p className="summary-placeholder" style={{ marginTop: '1rem', fontSize: '0.75rem' }}>
               Grafik von <a href="https://kubernetes.io/docs/concepts/architecture/" target="_blank" rel="noopener noreferrer">The Kubernetes Authors</a>, lizenziert unter <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>.
