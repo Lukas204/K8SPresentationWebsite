@@ -36,8 +36,7 @@ const ArchitectureSection = ({ onOpenModal }) => (
         <img 
           src="https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Lukas204/K8SPresentationWebsite/main/architecture.puml" 
           alt="Projekt Architektur" 
-          style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}
-          cursor: 'zoom-in'
+          style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.1)', cursor: 'zoom-in'}}
         />
         <p className="summary-placeholder" style={{ marginTop: '1rem', fontSize: '0.8rem' }}>
           Live-Rendering via PlantUML.
