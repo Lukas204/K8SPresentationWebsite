@@ -164,6 +164,19 @@ function App() {
                 <a href="https://opensource.com/sites/default/files/gated-content/osdc_cheatsheet-kubernetes-2021.4.16.pdf" className="card-link" target="_blank" rel="noopener noreferrer">PDF Cheat Sheet öffnen</a>
               </div>
             </article>
+            <article className="card">
+              <div className="card-img">
+                <img src="https://www.bsi.bund.de/SiteGlobals/Frontend/Images/logo.svg?__blob=normal&v=4" alt="BSI IT-Grundschutz" style={{ padding: '20px', objectFit: 'contain', backgroundColor: '#f5f5f5' }} />
+              </div>
+              <div className="card-content">
+                <h3>BSI IT-Grundschutz: APP.4.4 Kubernetes</h3>
+                <p>Offizieller Sicherheitsbaustein (Edition 2022) für den Schutz von Informationen in Kubernetes-Clustern.</p>
+                <span className="badge">Deutsch</span>
+                <span className="badge">BSI Standard</span>
+                <span className="badge">Sicherheit</span>
+                <a href="https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Grundschutz/IT-GS-Kompendium_Einzel_PDFs_2022/06_APP_Anwendungen/APP_4_4_Kubernetes_Edition_2022.pdf?__blob=publicationFile&v=3" className="card-link" target="_blank" rel="noopener noreferrer">BSI Baustein-PDF öffnen</a>
+              </div>
+            </article>
           </div>
         </section>
 
