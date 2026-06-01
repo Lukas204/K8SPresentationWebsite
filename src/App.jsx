@@ -83,6 +83,18 @@ function App() {
                 <a href="https://dpunkt.de/produkt/kubernetes-3/" className="card-link" target="_blank" rel="noopener noreferrer">Details beim Verlag</a>
               </div>
             </article>
+            <article className="card">
+              <div className="card-img">
+                <img src="https://opensource.com/sites/default/files/styles/image_full/public/lead-images/kubernetes_cheat_sheet.png?itok=3vN9-f7P" alt="Kubernetes Cheat Sheet" />
+              </div>
+              <div className="card-content">
+                <h3>Kubernetes Cheat Sheet</h3>
+                <p>Schnellreferenz für die wichtigsten Befehle (kubectl, Objekte, YAML)</p>
+                <span className="badge">Englisch</span>
+                <span className="badge">Quick Ref</span>
+                <a href="https://opensource.com/sites/default/files/gated-content/osdc_cheatsheet-kubernetes-2021.4.16.pdf" className="card-link" target="_blank" rel="noopener noreferrer">PDF Cheat Sheet öffnen</a>
+              </div>
+            </article>
           </div>
         </section>
 
