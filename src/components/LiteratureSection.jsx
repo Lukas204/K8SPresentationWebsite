@@ -1,7 +1,7 @@
 import React from 'react';
 
 const LiteratureSection = () => (
-  <section id="literature" style={{ marginBottom: '4rem' }}>
+  <section id="literature" className="summary-section" style={{ marginBottom: '4rem' }}>
     <h2>Literatur & Ressourcen</h2>
     <div className="literature-grid">
       <a href="https://github.com/rohitg00/DevOps_Books/blob/main/O'Reilly%20Kubernetes%20Up%20and%20Running.pdf" className="card" target="_blank" rel="noopener noreferrer">
