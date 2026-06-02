@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 import ArchitectureSection from './components/ArchitectureSection';
+import K8sConceptsSection from './components/K8sConceptsSection';
 import LiteratureSection from './components/LiteratureSection';
 import KaaSSection from './components/KaaSSection';
 import CommentSection from './components/CommentSection';
@@ -91,6 +92,7 @@ function App() {
 
         <main>
           <ArchitectureSection onOpenModal={(url) => setModalImage(url)} />
+          <K8sConceptsSection />
           <LiteratureSection />
           <KaaSSection />
           <CommentSection
@@ -111,6 +113,10 @@ function App() {
           </div>
         </footer>
       </div>
+  );
+}
+
+export default App;>
   );
 }
 

@@ -5,8 +5,9 @@ const Navbar = () => (
     <div className="nav-container">
       <a href="#" className="nav-brand">K8s Handout</a>
       <ul className="nav-links">
-        <li><a href="#official-architecture">Konzept</a></li>
-        <li><a href="#architecture">Projekt-Setup</a></li>
+        <li><a href="#official-architecture">Architektur</a></li>
+        <li><a href="#concepts">Konzepte</a></li>
+        <li><a href="#architecture">Setup</a></li>
         <li><a href="#literature">Literatur</a></li>
         <li><a href="#kaas">KaaS</a></li>
         <li><a href="#comments">Diskussion</a></li>
