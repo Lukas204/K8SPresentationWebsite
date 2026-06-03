@@ -1,7 +1,7 @@
 import React from 'react';
 
 const KaaSSection = () => (
-  <section id="kaas" className="summary-section" style={{ marginBottom: '4rem' }}>
+  <section id="kaas" className="summary-section">
     <h2>Kubernetes as a Service (KaaS)</h2>
     <p style={{ marginBottom: '1.5rem' }}>
       Managed Lösungen reduzieren den Administrationsaufwand drastisch:
