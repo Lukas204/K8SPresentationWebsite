@@ -4,29 +4,7 @@ const Header = () => (
   <header>
     <h1>Kubernetes Handout</h1>
       <p>Begleitmaterialien und weiterführende Informationen zur Präsentation</p>
-      <p
-          style={{
-              maxWidth: '600px',
-              margin: '0 auto',
-              opacity: '0.9',
-              fontSize: '1rem',
-          }}
-      >
-          Hier finden Sie ausgewählte Diagramme, Quellen und ergänzende
-          Informationen zu den Inhalten der Präsentation.
-      </p>
-
-      <p
-          style={{
-              maxWidth: '600px',
-              margin: '0 auto',
-              opacity: '0.9',
-              fontSize: '1rem',
-          }}
-      >
-          Die Seite wird lokal über Kubernetes gehostet und per Jenkins CI/CD
-          automatisiert bereitgestellt.
-      </p>
+      <p>Die Seite wird lokal über Kubernetes gehostet.</p>
     <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
       <a 
         href="https://github.com/Lukas204/K8SPresentationWebsite" 
