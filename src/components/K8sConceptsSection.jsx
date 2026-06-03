@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const K8sConceptsSection = () => {
-    // Die Konzepte wurden in logische Gruppen unterteilt und Duplikate entfernt
+    // State für die aktuell ausgewählte Kategorie (Index)
+    const [activeTab, setActiveTab] = useState(0);
+
     const conceptCategories = [
         {
             categoryName: "Infrastruktur & Architektur",
@@ -17,12 +19,12 @@ const K8sConceptsSection = () => {
                 },
                 {
                     title: 'Namespaces',
-                    description: 'Virtuelle Cluster innerhalb eines physischen Clusters zur isolation und Trennung von Ressourcen zwischen verschiedenen Projekten, Umgebungen oder Teams.'
+                    description: 'Virtuelle Cluster innerhalb eines physischen Clusters zur Isolation und Trennung von Ressourcen zwischen verschiedenen Projekten, Umgebungen oder Teams.'
                 }
             ]
         },
         {
-            categoryName: "📦 Workloads & Applikationen",
+            categoryName: "Workloads & Applikationen",
             description: "Objekte, mit denen Sie Ihre Container ausführen und verwalten.",
             items: [
                 {
@@ -101,54 +103,87 @@ const K8sConceptsSection = () => {
 
     return (
         <section id="concepts" className="summary-section" style={{ marginBottom: '4rem', fontFamily: 'sans-serif' }}>
-            <header style={{ marginBottom: '2.5rem' }}>
+            <header style={{ marginBottom: '2rem' }}>
                 <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Core Konzepte</h2>
-                <p style={{ color: '#666' }}>Die grundlegenden Bausteine von Kubernetes nach Themengebieten sortiert:</p>
+                <p style={{ color: '#666', margin: 0 }}>Wählen Sie einen Bereich, um die entsprechenden Kubernetes-Bausteine zu sehen:</p>
             </header>
 
-            {conceptCategories.map((category, catIndex) => (
-                <div key={catIndex} style={{ marginBottom: '3rem' }}>
-                    <div style={{ borderBottom: '2px solid #eaeaea', paddingBottom: '0.5rem', marginBottom: '1.5rem' }}>
-                        <h3 style={{ fontSize: '1.4rem', margin: 0, color: '#333' }}>{category.categoryName}</h3>
-                        <p style={{ fontSize: '0.9rem', color: '#777', margin: '0.25rem 0 0 0' }}>{category.description}</p>
-                    </div>
+            {/* Interaktive Tab-Navigation */}
+            <div style={{
+                display: 'flex',
+                gap: '0.5rem',
+                flexWrap: 'wrap',
+                marginBottom: '2rem',
+                borderBottom: '1px solid #e0e0e0',
+                paddingBottom: '1rem'
+            }}>
+                {conceptCategories.map((category, index) => {
+                    const isActive = activeTab === index;
+                    return (
+                        <button
+                            key={index}
+                            onClick={() => setActiveTab(index)}
+                            style={{
+                                padding: '0.6rem 1.2rem',
+                                fontSize: '0.95rem',
+                                fontWeight: isActive ? '600' : '400',
+                                color: isActive ? '#fff' : '#555',
+                                backgroundColor: isActive ? 'var(--k8s-blue, #1976d2)' : '#f5f5f5',
+                                border: isActive ? '1px solid var(--k8s-blue, #1976d2)' : '1px solid #e0e0e0',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease-in-out'
+                            }}
+                        >
+                            {category.categoryName}
+                        </button>
+                    );
+                })}
+            </div>
 
-                    <div className="literature-grid" style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                        gap: '1.5rem'
-                    }}>
-                        {category.items.map((concept, index) => (
-                            <article className="card" key={index} style={{
-                                background: '#fff',
-                                border: '1px solid #e0e0e0',
-                                borderRadius: '8px',
-                                padding: '1.5rem',
-                                boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
-                            }}>
-                                <div className="card-content">
-                                    <h4 style={{
-                                        color: 'var(--k8s-blue, #1976d2)',
-                                        margin: '0 0 0.75rem 0',
-                                        fontSize: '1.1rem',
-                                        fontWeight: '600'
-                                    }}>
-                                        {concept.title}
-                                    </h4>
-                                    <p style={{
-                                        fontSize: '0.925rem',
-                                        lineHeight: '1.5',
-                                        color: '#444',
-                                        margin: 0
-                                    }}>
-                                        {concept.description}
-                                    </p>
-                                </div>
-                            </article>
-                        ))}
-                    </div>
+            {/* Anzeige der aktivierten Kategorie */}
+            <div style={{ animation: 'fadeIn 0.3s ease' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                    <p style={{ fontSize: '1.05rem', color: '#555', fontStyle: 'italic', margin: 0 }}>
+                        {conceptCategories[activeTab].description}
+                    </p>
                 </div>
-            ))}
+
+                <div className="literature-grid" style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                    gap: '1.5rem'
+                }}>
+                    {conceptCategories[activeTab].items.map((concept, index) => (
+                        <article className="card" key={index} style={{
+                            background: '#fff',
+                            border: '1px solid #e0e0e0',
+                            borderRadius: '8px',
+                            padding: '1.5rem',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                        }}>
+                            <div className="card-content">
+                                <h4 style={{
+                                    color: 'var(--k8s-blue, #1976d2)',
+                                    margin: '0 0 0.75rem 0',
+                                    fontSize: '1.1rem',
+                                    fontWeight: '600'
+                                }}>
+                                    {concept.title}
+                                </h4>
+                                <p style={{
+                                    fontSize: '0.925rem',
+                                    lineHeight: '1.5',
+                                    color: '#444',
+                                    margin: 0
+                                }}>
+                                    {concept.description}
+                                </p>
+                            </div>
+                        </article>
+                    ))}
+                </div>
+            </div>
         </section>
     );
 };
