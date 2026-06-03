@@ -103,10 +103,10 @@ const K8sConceptsSection = () => {
 
     return (
         <section id="concepts" className="summary-section" style={{ marginBottom: '4rem', fontFamily: 'sans-serif' }}>
-            <header style={{ marginBottom: '2rem' }}>
+            <div style={{ marginBottom: '2rem' }}>
                 <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Core Konzepte</h2>
                 <p style={{ color: '#666', margin: 0 }}>Wählen Sie einen Bereich, um die entsprechenden Kubernetes-Bausteine zu sehen:</p>
-            </header>
+            </div>
 
             {/* Interaktive Tab-Navigation */}
             <div style={{
