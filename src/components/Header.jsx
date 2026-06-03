@@ -4,7 +4,10 @@ const Header = () => (
   <header>
     <h1>Kubernetes Handout</h1>
       <p>Begleitmaterialien und weiterführende Informationen zur Präsentation</p>
-      <p>Die Seite wird lokal über Kubernetes gehostet.</p>
+      <p>
+          Diese Seite bündelt Diagramme, Quellen und ergänzende Inhalte. Die Anwendung wird lokal mit
+          <a href="https://kind.sigs.k8s.io/">kind</a> in einem Kubernetes-Cluster betrieben.
+      </p>
     <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
       <a 
         href="https://github.com/Lukas204/K8SPresentationWebsite" 
