@@ -6,96 +6,135 @@ const K8sConceptsSection = () => {
 
     const conceptCategories = [
         {
-            categoryName: "Infrastruktur & Architektur",
-            description: "Die physischen und logischen Grundbausteine des Clusters.",
+            categoryName: "Cluster-Grundlagen",
+            description: "Die Architektur und die zentralen Bausteine eines Kubernetes-Clusters.",
             items: [
                 {
-                    title: 'Nodes',
-                    description: 'Eine physische oder virtuelle Maschine im Cluster. Man unterscheidet zwischen Worker Nodes (für Anwendungs-Pods) und Control Plane Nodes (für die Cluster-Verwaltung).'
+                    title: "Cluster",
+                    description: "Eine Gruppe von Maschinen (Nodes), die gemeinsam Container-Anwendungen ausführen und verwalten."
                 },
                 {
-                    title: 'Control Plane',
-                    description: 'Die Steuerungsebene des Clusters. Sie trifft globale Entscheidungen (z. B. Scheduling) und reagiert auf Cluster-Ereignisse. Beinhaltet Komponenten wie den API-Server, etcd, Scheduler und Controller Manager.'
+                    title: "Nodes",
+                    description: "Physische oder virtuelle Maschinen im Cluster. Worker Nodes führen Anwendungen aus, während die Control Plane den Cluster steuert."
                 },
                 {
-                    title: 'Namespaces',
-                    description: 'Virtuelle Cluster innerhalb eines physischen Clusters zur Isolation und Trennung von Ressourcen zwischen verschiedenen Projekten, Umgebungen oder Teams.'
+                    title: "Control Plane",
+                    description: "Das Gehirn des Clusters. Verwaltet den gewünschten Zustand, plant Pods auf Nodes und überwacht den Cluster."
+                },
+                {
+                    title: "Namespaces",
+                    description: "Virtuelle Unterteilungen innerhalb eines Clusters zur Trennung von Projekten, Teams oder Umgebungen."
                 }
             ]
         },
+
         {
-            categoryName: "Workloads & Applikationen",
-            description: "Objekte, mit denen Sie Ihre Container ausführen und verwalten.",
+            categoryName: "Workloads & Anwendungen",
+            description: "Objekte zur Ausführung und Verwaltung containerisierter Anwendungen.",
             items: [
                 {
-                    title: 'Pods',
-                    description: 'Die kleinste bereitstellbare Einheit in K8s. Ein Pod kapselt einen oder mehrere Container, gemeinsame Speicherressourcen und eine eindeutige Netzwerk-IP.'
+                    title: "Pods",
+                    description: "Die kleinste deploybare Einheit in Kubernetes. Ein Pod enthält einen oder mehrere Container mit gemeinsamer Netzwerk- und Speicherumgebung."
                 },
                 {
-                    title: 'Deployments',
-                    description: 'Beschreibt den gewünschten Zustand für Pods und ReplicaSets. Der Deployment-Controller sorgt im Hintergrund für die schrittweise Aktualisierung und Skalierung.'
+                    title: "Deployments",
+                    description: "Definieren den gewünschten Zustand einer Anwendung und ermöglichen Updates, Rollbacks und Skalierung."
                 },
                 {
-                    title: 'ReplicaSets',
-                    description: 'Stellt sicher, dass zu jedem Zeitpunkt eine exakt definierte Anzahl von Pod-Replikaten ausgeführt wird. Wird meist automatisch von Deployments gesteuert.'
+                    title: "ReplicaSets",
+                    description: "Sorgen dafür, dass immer eine festgelegte Anzahl von Pod-Instanzen verfügbar ist."
                 },
                 {
-                    title: 'StatefulSets',
-                    description: 'Speziell für zustandsbehaftete (stateful) Anwendungen. Sie garantieren eine feste, persistente Identität und eine geordnete Bereitstellung der Pods.'
+                    title: "StatefulSets",
+                    description: "Für zustandsbehaftete Anwendungen wie Datenbanken. Jeder Pod besitzt eine feste Identität und dauerhaft zugeordneten Speicher."
                 },
                 {
-                    title: 'DaemonSets',
-                    description: 'Stellt sicher, dass auf allen (oder bestimmten) Nodes im Cluster genau eine Kopie eines Pods läuft (ideal für Logging- oder Monitoring-Agenten).'
+                    title: "DaemonSets",
+                    description: "Stellen sicher, dass auf ausgewählten Nodes jeweils genau eine Instanz eines Pods läuft, z. B. für Monitoring oder Logging."
                 },
                 {
-                    title: 'Jobs & CronJobs',
-                    description: 'Jobs führen Pods aus, bis eine bestimmte Aufgabe erfolgreich abgeschlossen ist. CronJobs starten diese Aufgaben zeitgesteuert nach einem festgelegten Zeitplan.'
+                    title: "Jobs & CronJobs",
+                    description: "Jobs führen einmalige Aufgaben aus. CronJobs starten diese regelmäßig nach einem definierten Zeitplan."
                 }
             ]
         },
+
         {
-            categoryName: "Netzwerk & Zugriff",
-            description: "Komponenten, die die Kommunikation nach innen und außen regeln.",
+            categoryName: "Netzwerk & Kommunikation",
+            description: "Komponenten für die Kommunikation innerhalb und außerhalb des Clusters.",
             items: [
                 {
-                    title: 'Services',
-                    description: 'Abstraktion, die eine Gruppe von Pods als Netzwerkdienst definiert. Ermöglicht eine stabile IP-Adresse und automatische Lastverteilung (Load Balancing).'
+                    title: "Services",
+                    description: "Bieten eine stabile Netzwerkadresse für Pods und verteilen Anfragen automatisch auf mehrere Instanzen."
                 },
                 {
-                    title: 'Ingress',
-                    description: 'Verwaltet den externen Zugriff auf Dienste im Cluster (meist HTTP/HTTPS). Bietet SSL-Terminierung, Routing-Regeln und namensbasiertes virtuelles Hosting.'
+                    title: "Ingress",
+                    description: "Steuert den externen Zugriff auf Anwendungen über HTTP/HTTPS und ermöglicht Routing anhand von Domains oder Pfaden."
+                },
+                {
+                    title: "DNS",
+                    description: "Ermöglicht die interne Namensauflösung von Services und vereinfacht die Kommunikation zwischen Anwendungen."
                 }
             ]
         },
+
         {
-            categoryName: "Konfiguration & Speicher",
-            description: "Wie Ihre Anwendungen Daten sichern und Einstellungen laden.",
+            categoryName: "Konfiguration & Persistenz",
+            description: "Mechanismen zur Verwaltung von Einstellungen und Daten.",
             items: [
                 {
-                    title: 'ConfigMaps & Secrets',
-                    description: 'Dienen zur Speicherung von Konfigurationsdaten (ConfigMaps) und sensiblen Infos wie Passwörtern (Secrets) – strikt getrennt vom eigentlichen Anwendungscode.'
+                    title: "ConfigMaps",
+                    description: "Speichern Konfigurationswerte getrennt vom Anwendungscode."
                 },
                 {
-                    title: 'Volumes',
-                    description: 'Ein Verzeichnis, auf das Container in einem Pod zugreifen können, um das Problem der Datenflüchtigkeit in Containern zu lösen.'
+                    title: "Secrets",
+                    description: "Speichern sensible Daten wie Passwörter, API-Keys oder Zertifikate."
                 },
                 {
-                    title: 'PV & PVC',
-                    description: 'PersistentVolumes (PV) sind vom Admin bereitgestellte Speicherressourcen. PersistentVolumeClaims (PVC) sind die "Anforderungen" der Nutzer an diesen Speicher.'
+                    title: "Volumes",
+                    description: "Persistenter Speicher, der Containern innerhalb eines Pods zur Verfügung gestellt wird."
+                },
+                {
+                    title: "Persistent Volumes (PV)",
+                    description: "Vom Cluster bereitgestellte Speicherressourcen."
+                },
+                {
+                    title: "Persistent Volume Claims (PVC)",
+                    description: "Anforderungen von Anwendungen an persistenten Speicher."
                 }
             ]
         },
+
         {
-            categoryName: "Automatisierung & Metadaten",
-            description: "Werkzeuge zur Organisation und dynamischen Anpassung.",
+            categoryName: "Skalierung & Automatisierung",
+            description: "Werkzeuge zur automatischen Anpassung und effizienten Ressourcennutzung.",
             items: [
                 {
-                    title: 'Horizontal Pod Autoscaler (HPA)',
-                    description: 'Skaliert die Anzahl der Pods in einem Deployment oder StatefulSet automatisch basierend auf der aktuellen CPU-Auslastung oder anderen Metriken.'
+                    title: "Horizontal Pod Autoscaler (HPA)",
+                    description: "Passt die Anzahl der Pods automatisch anhand von Metriken wie CPU- oder Speicherauslastung an."
                 },
                 {
-                    title: 'Labels & Selectors',
-                    description: 'Schlüssel-Wert-Paare (Labels), die an Objekten haften. Selectors erlauben es, diese Objekte basierend auf den Labels gezielt abzufragen und zu verknüpfen.'
+                    title: "Resource Requests & Limits",
+                    description: "Definieren die minimalen und maximalen CPU- und Speicherressourcen für Container."
+                },
+                {
+                    title: "Self-Healing",
+                    description: "Kubernetes ersetzt ausgefallene Pods automatisch und stellt den gewünschten Zustand wieder her."
+                }
+            ]
+        },
+
+        {
+            categoryName: "Organisation & Sicherheit",
+            description: "Mechanismen zur Strukturierung und Absicherung von Anwendungen.",
+            items: [
+                {
+                    title: "Labels & Selectors",
+                    description: "Schlüssel-Wert-Paare zur Gruppierung und Auswahl von Kubernetes-Objekten."
+                },
+                {
+                    title: "RBAC",
+                    description: "Role-Based Access Control regelt, welche Benutzer oder Dienste auf bestimmte Ressourcen zugreifen dürfen."
                 }
             ]
         }
