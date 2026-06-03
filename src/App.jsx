@@ -5,6 +5,8 @@ import Footer from './components/Footer';
 import ImageModal from './components/ImageModal';
 import { OfficialArchitectureSection, ProjectArchitectureSection } from './components/ArchitectureSection';
 import K8sConceptsSection from './components/K8sConceptsSection';
+import YamlExamplesSection from './components/YamlExamplesSection';
+import KeyTakeawaysSection from './components/KeyTakeawaysSection';
 import LiteratureSection from './components/LiteratureSection';
 import KaaSSection from './components/KaaSSection';
 import CommentSection from './components/CommentSection';
@@ -21,8 +23,10 @@ function App() {
         <Header />
 
         <main>
+          <KeyTakeawaysSection />
           <OfficialArchitectureSection onOpenModal={setModalImage} />
           <K8sConceptsSection />
+          <YamlExamplesSection />
           <ProjectArchitectureSection onOpenModal={setModalImage} />
           <LiteratureSection />
           <KaaSSection />
