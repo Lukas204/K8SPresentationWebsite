@@ -6,7 +6,7 @@ const Header = () => (
       <p>Begleitmaterialien und weiterführende Informationen zur Präsentation</p>
       <p>
           Diese Seite bündelt Diagramme, Quellen und ergänzende Inhalte. Die Anwendung wird lokal mit
-          <a href="https://kind.sigs.k8s.io/" style={{ color: 'inherit', textDecoration: 'none' }}>kind</a> in einem Kubernetes-Cluster betrieben.
+          <a href="https://kind.sigs.k8s.io/" target="_blank"  rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none'}}>kind</a> in einem Kubernetes-Cluster betrieben.
       </p>
     <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
       <a 
