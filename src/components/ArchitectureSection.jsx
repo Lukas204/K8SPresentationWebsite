@@ -1,4 +1,5 @@
 import React from 'react';
+import architectureSvg from '../assets/architecture.svg';
 
 export const OfficialArchitectureSection = ({ onOpenModal }) => (
     <section id="official-architecture" className="summary-section">
@@ -25,13 +26,13 @@ export const ProjectArchitectureSection = ({ onOpenModal }) => (
         <div className="architecture-container">
             <p style={{ marginBottom: '1.5rem' }}>Visualisierung der konkreten Implementierung inkl. Cloudflare, HPA und git-sync:</p>
             <img
-                src="https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Lukas204/K8SPresentationWebsite/main/architecture.puml"
-                onClick={() => onOpenModal("https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/Lukas204/K8SPresentationWebsite/main/architecture.puml")}
+                src={architectureSvg}
+                onClick={() => onOpenModal(architectureSvg)}
                 alt="Projekt Architektur"
                 className="architecture-image"
             />
             <p className="architecture-attribution" style={{ fontSize: '0.8rem' }}>
-                Live-Rendering via PlantUML.
+                Statisch gerendert via PlantUML.
             </p>
         </div>
     </section>

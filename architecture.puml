@@ -18,7 +18,6 @@ skinparam rectangle {
 }
 
 header Kubernetes Presentation Handout Architecture (CI/CD Integrated)
-footer Stand: 2026
 
 ' 1. Linke Flanke: Datenquelle
 rectangle "Extern / Internet" <<External>> {
